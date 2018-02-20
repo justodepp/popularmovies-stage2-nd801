@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity"
+    tools:showIn="@layout/activity_detail">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailTextView"
+        android:textSize="@dimen/detail_heading_size"
+        android:paddingLeft="@dimen/detail_generic_spacing"
+        android:paddingStart="@dimen/detail_generic_spacing"
+        android:paddingTop="30dp"
+        android:paddingBottom="25dp"
+        android:text="Header Movie"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/detailScrollView"
+        android:layout_below="@+id/detailTextView">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/detail_horizontal_margin"
+            android:layout_marginRight="@dimen/detail_horizontal_margin"
+            android:id="@+id/detailScrollViewContainer">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/posterImageView"
+                android:layout_marginTop="@dimen/detail_generic_spacing"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                tools:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/releaseDate"
+                android:text="2nd October, 1869"
+                android:layout_alignTop="@+id/posterImageView"
+                android:layout_toRightOf="@+id/posterImageView"
+                android:layout_toEndOf="@+id/posterImageView"
+                android:layout_marginLeft="@dimen/detail_generic_spacing"
+                android:layout_marginStart="@dimen/detail_generic_spacing"
+                android:textSize="20sp"/>
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rating"
+                android:layout_alignLeft="@+id/releaseDate"
+                android:layout_alignStart="@+id/releaseDate"
+                android:layout_below="@+id/releaseDate"
+                style="?android:attr/ratingBarStyleSmall"
+                android:isIndicator="true"
+                android:stepSize="0.25"
+                android:layout_marginTop="@dimen/detail_generic_spacing"
+                android:rating="5.0"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingTextView"
+                android:layout_below="@+id/rating"
+                android:layout_alignLeft="@+id/rating"
+                android:layout_alignStart="@+id/rating"
+                android:text="7.6/10"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/overviewTextView"
+                android:layout_below="@+id/posterImageView"
+                android:layout_marginTop="@dimen/detail_generic_spacing"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="Lorem iasda sdakds akdsakd sdkads"/>
+
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_below="@+id/overviewTextView"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:id="@+id/splitterTrailer"-->
+            <!--android:background="#ffffff"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_marginEnd="20dp"/>-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/overviewTextView"
+                android:id="@+id/trailerHeader"
+                android:layout_marginTop="@dimen/detail_generic_spacing"
+                android:textSize="20sp"
+                android:text="@string/details_text_videos"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/trailerHeader"
+                android:layout_marginTop="15dp"
+                android:id="@+id/trailersList"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reviews:"
+                android:layout_below="@+id/trailersList"
+                android:textSize="20sp"
+                android:id="@+id/reviewHeader"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reviewHeader"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:id="@+id/reviewsList">
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

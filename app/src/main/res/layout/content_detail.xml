@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_detail">
+
+    <RelativeLayout
+        android:id="@+id/detailContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_horizontal_margin"
+        android:layout_marginRight="@dimen/detail_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/posterImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/posterImageView"
+            android:layout_marginLeft="@dimen/detail_generic_spacing"
+            android:layout_marginStart="@dimen/detail_generic_spacing"
+            android:layout_toEndOf="@+id/posterImageView"
+            android:layout_toRightOf="@+id/posterImageView"
+            tools:text="2nd October, 1999"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            android:layout_alignLeft="@+id/releaseDate"
+            android:layout_alignStart="@+id/releaseDate"
+            android:layout_below="@+id/releaseDate"
+            android:textSize="@dimen/text_size" />
+
+        <RatingBar
+            android:id="@+id/rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/releaseDate"
+            android:layout_alignStart="@+id/releaseDate"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            android:isIndicator="true"
+            android:rating="5.0"
+            android:stepSize="0.25" />
+
+        <TextView
+            android:id="@+id/ratingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rating"
+            android:layout_alignStart="@+id/rating"
+            android:layout_below="@+id/rating"
+            tools:text="5.6/10" />
+
+        <TextView
+            android:id="@+id/overviewTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/posterImageView"
+            android:layout_marginEnd="@dimen/detail_horizontal_margin"
+            android:layout_marginRight="@dimen/detail_horizontal_margin"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            tools:text="Some text to display" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

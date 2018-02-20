@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">Popular Movies</string>
+
+    <string name="sort">Search By</string>
+    <string name="popularity">Popularity</string>
+    <string name="top_rated">Top Rated</string>
+
+    <!-- Detail Activity-->
+
+    <!-- Content descriptions-->
+
+    <!-- Error messages-->
+    <string name="error_message">Data not available.\nCheck you network connection and retry</string>
+    <string name="no_api_key">To perform a query API KEY is required</string>
+
+</resources>
