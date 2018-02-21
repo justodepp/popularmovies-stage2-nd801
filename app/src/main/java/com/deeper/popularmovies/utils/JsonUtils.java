@@ -1,13 +1,13 @@
 package com.deeper.popularmovies.utils;
 
+import com.deeper.popularmovies.model.Movie;
+import com.deeper.popularmovies.model.MovieList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import it.deeper.popularmovies.model.Movie;
-import it.deeper.popularmovies.model.MovieList;
 
 public class JsonUtils {
 

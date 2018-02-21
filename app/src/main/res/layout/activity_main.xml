@@ -58,4 +58,14 @@
             android:layout_height="match_parent" />
 
     </RelativeLayout>
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@drawable/selector_bottom_view"
+        app:itemTextColor="@drawable/selector_bottom_view"
+        app:menu="@menu/bottom_menu"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -5,6 +5,7 @@
     <string name="sort">Search By</string>
     <string name="popularity">Popularity</string>
     <string name="top_rated">Top Rated</string>
+    <string name="favourite">Favourite</string>
 
     <!-- Detail Activity-->
 

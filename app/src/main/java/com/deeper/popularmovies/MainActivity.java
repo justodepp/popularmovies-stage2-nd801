@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -16,24 +18,25 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.deeper.popularmovies.adapter.MovieAdapter;
+import com.deeper.popularmovies.model.MovieList;
+import com.deeper.popularmovies.utils.JsonUtils;
+import com.deeper.popularmovies.utils.NetworkUtils;
+import com.deeper.popularmovies.utils.Params;
 
 import java.net.URL;
 
-import it.deeper.popularmovies.adapter.MovieAdapter;
-import it.deeper.popularmovies.model.MovieList;
-import it.deeper.popularmovies.utils.JsonUtils;
-import it.deeper.popularmovies.utils.NetworkUtils;
-import it.deeper.popularmovies.utils.Params;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<MovieList>, MovieAdapter.MovieClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        BottomNavigationView.OnNavigationItemSelectedListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private MovieList movieList;
     private MovieAdapter movieAdapter;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements
 
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) {
             String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
@@ -118,14 +125,16 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showJsonDataView() {
         /* First, make sure the error is invisible */
-        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.GONE);
         /* Then, make sure the JSON data is visible */
         mRecyclerView.setVisibility(View.VISIBLE);
+        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     private void showErrorMessage() {
         /* First, hide the currently visible data */
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        bottomNavigationView.setVisibility(View.GONE);
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
@@ -139,14 +148,15 @@ public class MainActivity extends AppCompatActivity implements
 
     private void errorNetwork() {
         mRecyclerView.setVisibility(View.GONE);
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        bottomNavigationView.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.bottom_menu, menu);
         return true;
     }
 
@@ -172,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -265,6 +275,33 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onRefresh() {
         makeMovieDbSearchQuery(queryMovie, pageNum);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (!isOnline()) return false;
+        if (Params.API_KEY.equals("")) return false;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_popular:
+                queryMovie = "popular";
+                makeMovieDbSearchQuery(queryMovie, pageNum);
+                nameSort = "Popular Movies";
+                setTitle(nameSort);
+                break;
+            case R.id.action_top_rated:
+                queryMovie = "top_rated";
+                makeMovieDbSearchQuery(queryMovie, pageNum);
+                nameSort = "Top Rated Movies";
+                setTitle(nameSort);
+                break;
+            case R.id.action_favorites:
+                Toast.makeText(this, "Coming soon.", Toast.LENGTH_SHORT).show();
+                nameSort = "Favourite";
+                setTitle(nameSort);
+                break;
+        }
+        return true;
     }
 }
 

@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.deeper.popularmovies.R;
+import com.deeper.popularmovies.model.Movie;
+import com.deeper.popularmovies.utils.Params;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import it.deeper.popularmovies.R;
-import it.deeper.popularmovies.model.Movie;
-import it.deeper.popularmovies.utils.Params;
 
 
 /**

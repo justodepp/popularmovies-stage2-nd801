@@ -10,14 +10,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.deeper.popularmovies.model.Movie;
+import com.deeper.popularmovies.utils.Params;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import it.deeper.popularmovies.model.Movie;
-import it.deeper.popularmovies.utils.Params;
 
 public class DetailActivity extends AppCompatActivity {
 
