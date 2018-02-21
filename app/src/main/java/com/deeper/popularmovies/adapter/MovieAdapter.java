@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.deeper.popularmovies.R;
 import com.deeper.popularmovies.model.Movie;
 import com.deeper.popularmovies.utils.Params;
+import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>{
 
     private Context context;
-    private ArrayList<Movie> movies;
+    private ArrayList<MovieListResult> movies;
 
     private final MovieClickListener mMovieClickListener;
 
@@ -30,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         void onClickMovie(int position);
     }
 
-    public MovieAdapter(Context context, ArrayList<Movie> movies, MovieClickListener movieClickListener){
+    public MovieAdapter(Context context, ArrayList<MovieListResult> movies, MovieClickListener movieClickListener){
         this.context = context;
         this.movies = movies;
         mMovieClickListener = movieClickListener;

@@ -1,6 +1,7 @@
 package com.deeper.popularmovies;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.deeper.popularmovies.model.Movie;
 import com.deeper.popularmovies.utils.Params;
+import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -20,7 +22,7 @@ import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private static Movie mMovie;
+    private static MovieListResult mMovie;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,20 +38,25 @@ public class DetailActivity extends AppCompatActivity {
         loadBackdrop(poster, Params.IMAGE_PATH.concat(Params.IMAGE_SIZE[3])
                 .concat(mMovie.getPosterPath()));
 
-        TextView releaseDate = findViewById(R.id.releaseDate);
-        releaseDate.setText(reformatDate(mMovie.getReleaseDate()));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TextView releaseDate = findViewById(R.id.releaseDate);
+                releaseDate.setText(reformatDate(mMovie.getReleaseDate()));
 
-        TextView title = findViewById(R.id.title);
-        title.setText(mMovie.getTitle());
+                TextView title = findViewById(R.id.title);
+                title.setText(mMovie.getTitle());
 
-        TextView rating = findViewById(R.id.ratingTextView);
-        rating.setText(mMovie.getRating()+ "/10");
+                TextView rating = findViewById(R.id.ratingTextView);
+                rating.setText(mMovie.getVoteAverage()+ "/10");
 
-        RatingBar ratingBar = findViewById(R.id.rating);
-        ratingBar.setRating(Float.valueOf(mMovie.getRating()) / 2f);
+                RatingBar ratingBar = findViewById(R.id.rating);
+                ratingBar.setRating(mMovie.getVoteAverage() / 2f);
 
-        TextView overview = findViewById(R.id.overviewTextView);
-        overview.setText(mMovie.getOverview());
+                TextView overview = findViewById(R.id.overviewTextView);
+                overview.setText(mMovie.getOverview());
+            }
+        }, 250);
     }
 
     private String reformatDate(String releaseDate) {
@@ -106,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
                 .into(backdrop);
     }
 
-    public static void setMovieDetails(Movie movie){
+    public static void setMovieDetails(MovieListResult movie){
         mMovie = movie;
     }
 

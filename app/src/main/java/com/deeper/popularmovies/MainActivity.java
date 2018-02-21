@@ -9,15 +9,11 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -26,22 +22,20 @@ import android.widget.Toast;
 
 import com.deeper.popularmovies.adapter.MovieAdapter;
 import com.deeper.popularmovies.model.MovieList;
-import com.deeper.popularmovies.utils.JsonUtils;
-import com.deeper.popularmovies.utils.NetworkUtils;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.utils.api.ApiEndPointHandler;
 import com.deeper.popularmovies.utils.api.ApiEndpointInterfaces;
 import com.deeper.popularmovies.utils.api.model.movieList.MovieListResponse;
+import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
 
-import java.net.URL;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<MovieList>, MovieAdapter.MovieClickListener,
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener,
         SwipeRefreshLayout.OnRefreshListener,
         BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -62,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private RecyclerView mRecyclerView;
     private MovieList movieList;
+    private ArrayList<MovieListResult> movieListResults = new ArrayList<>();
     private MovieAdapter movieAdapter;
     private BottomNavigationView bottomNavigationView;
 
@@ -91,12 +86,14 @@ public class MainActivity extends AppCompatActivity implements
             String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
         }
 
-        /*
-         * Initialize the loader
-         */
-        getSupportLoaderManager().initLoader(MOVIEDB_SEARCH_LOADER, null, this);
-
-        makeMovieDbSearchQuery(queryMovie, pageNum);
+        if (!isOnline()) {
+            errorNetwork();
+        } else if (Params.API_KEY.equals("")) {
+            errorNetwork();
+            mErrorMessageDisplay.setText(R.string.no_api_key);
+        } else {
+            callPopular();
+        }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -107,32 +104,14 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                pageNum ++;
-//                makeMovieDbSearchQuery(queryMovie, pageNum);
             }
         });
-    }
-
-    private void makeMovieDbSearchQuery(String queryMovie, int pageNum) {
-        URL moviedbSearchUrl = NetworkUtils.buildUrl(queryMovie, pageNum);
-
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(SEARCH_QUERY_URL_EXTRA, moviedbSearchUrl.toString());
-        queryBundle.putString(SEARCH_QUERY_SORT, queryMovie);
-        queryBundle.putInt(SEARCH_QUERY_PAGE, pageNum);
-
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<String> movieDBLoader = loaderManager.getLoader(MOVIEDB_SEARCH_LOADER);
-        if (movieDBLoader == null) {
-            loaderManager.initLoader(MOVIEDB_SEARCH_LOADER, queryBundle, this);
-        } else {
-            loaderManager.restartLoader(MOVIEDB_SEARCH_LOADER, queryBundle, this);
-        }
     }
 
     private void showJsonDataView() {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
         /* Then, make sure the JSON data is visible */
         mRecyclerView.setVisibility(View.VISIBLE);
         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -160,111 +139,6 @@ public class MainActivity extends AppCompatActivity implements
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bottom_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!isOnline()) return false;
-        if (Params.API_KEY.equals("")) return false;
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.popularity:
-                queryMovie = "popular";
-                makeMovieDbSearchQuery(queryMovie, pageNum);
-                //new MovieFechtTask().execute(queryMovie);
-                nameSort = "Popular Movies";
-                setTitle(nameSort);
-                break;
-            case R.id.top_rated:
-                queryMovie = "top_rated";
-                makeMovieDbSearchQuery(queryMovie, pageNum);
-                //new MovieFechtTask().execute(queryMovie);
-                nameSort = "Top Rated Movies";
-                setTitle(nameSort);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
-    @SuppressLint("StaticFieldLeak")
-    @Override
-    public Loader<MovieList> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<MovieList>(this) {
-
-            MovieList mMovieJson;
-
-            @Override
-            protected void onStartLoading() {
-                if (args == null) {
-                    return;
-                }
-
-                mLoadingIndicator.setVisibility(View.VISIBLE);
-
-                if (mMovieJson != null) {
-                    deliverResult(mMovieJson);
-                } else {
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public MovieList loadInBackground() {
-                if (!isOnline()) {
-                    errorNetwork();
-                    return null;
-                }
-                if (Params.API_KEY.equals("")) {
-                    errorNetwork();
-                    mErrorMessageDisplay.setText(R.string.no_api_key);
-                    return null;
-                }
-                URL movieUrl = NetworkUtils.buildUrl(queryMovie, pageNum);
-                try {
-                    String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
-                    mMovieJson = JsonUtils.parseMovieJson(movieResponse);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return mMovieJson;
-            }
-
-            @Override
-            public void deliverResult(MovieList movieJson) {
-                super.deliverResult(movieJson);
-
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<MovieList> loader, MovieList movieList) {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-        if (movieList != null) {
-            showJsonDataView();
-
-            this.movieList = movieList;
-
-            movieAdapter = new MovieAdapter(this, this.movieList.getResult(), this);
-            mRecyclerView.setAdapter(movieAdapter);
-
-        } else {
-            showErrorMessage();
-            Log.e(LOG_TAG, "Problems with adapter");
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<MovieList> loader) {
-
-    }
-
     @Override
     public void onClickMovie(int position) {
         if (!isOnline()) {
@@ -273,15 +147,17 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         Intent intent = new Intent(this, DetailActivity.class);
-
-        DetailActivity.setMovieDetails(this.movieList.getResult().get(position));
-
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        DetailActivity.setMovieDetails(movieListResults.get(position));
+        startActivity(intent);
     }
 
     @Override
     public void onRefresh() {
-        makeMovieDbSearchQuery(queryMovie, pageNum);
+        if (!isOnline()) {
+            errorNetwork();
+            return;
+        }
+        callPopular();
     }
 
     @Override
@@ -292,13 +168,15 @@ public class MainActivity extends AppCompatActivity implements
         switch (id) {
             case R.id.action_popular:
                 queryMovie = "popular";
-                makeMovieDbSearchQuery(queryMovie, pageNum);
+                callPopular();
+                //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Popular Movies";
                 setTitle(nameSort);
                 break;
             case R.id.action_top_rated:
                 queryMovie = "top_rated";
-                makeMovieDbSearchQuery(queryMovie, pageNum);
+                callTopRated();
+                //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Top Rated Movies";
                 setTitle(nameSort);
                 break;
@@ -312,35 +190,53 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void callPopular(){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        movieListResults.clear();
+
         ApiEndpointInterfaces apiService = ApiEndPointHandler.getApiService(getApplicationContext());
         Call<MovieListResponse> responsePopular = apiService.getPopular(ApiEndPointHandler.getDefaultParams(getApplicationContext()));
 
         responsePopular.enqueue(new Callback<MovieListResponse>() {
             @Override
-            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
+            public void onResponse(@NonNull Call<MovieListResponse> call, @NonNull Response<MovieListResponse> response) {
+                if(response.isSuccessful()){
+                    movieListResults.addAll(response.body().getResults());
+                    movieAdapter = new MovieAdapter(MainActivity.this, movieListResults, MainActivity.this);
+                    mRecyclerView.setAdapter(movieAdapter);
 
+                    showJsonDataView();
+                }
             }
 
             @Override
-            public void onFailure(Call<MovieListResponse> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<MovieListResponse> call, @NonNull Throwable t) {
+                showErrorMessage();
             }
         });
     }
 
     private void callTopRated(){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        movieListResults.clear();
+
         ApiEndpointInterfaces apiService = ApiEndPointHandler.getApiService(getApplicationContext());
         Call<MovieListResponse> responseTopRated = apiService.getTopRated(ApiEndPointHandler.getDefaultParams(getApplicationContext()));
 
         responseTopRated.enqueue(new Callback<MovieListResponse>() {
             @Override
-            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
+            public void onResponse(@NonNull Call<MovieListResponse> call, @NonNull Response<MovieListResponse> response) {
+                if(response.isSuccessful()){
+                    movieListResults.addAll(response.body().getResults());
+                    movieAdapter = new MovieAdapter(MainActivity.this, movieListResults, MainActivity.this);
+                    mRecyclerView.setAdapter(movieAdapter);
 
+                    showJsonDataView();
+                }
             }
 
             @Override
-            public void onFailure(Call<MovieListResponse> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<MovieListResponse> call, @NonNull Throwable t) {
+                showErrorMessage();
             }
         });
     }
