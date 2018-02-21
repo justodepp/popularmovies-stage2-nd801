@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.deeper.popularmovies.model.Movie;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -30,33 +31,30 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         settingsToolbar();
-        fillData();
+        initView();
     }
 
-    private void fillData() {
+    private void initView() {
         ImageView poster = findViewById(R.id.posterImageView);
+        TextView releaseDate = findViewById(R.id.releaseDate);
+        TextView title = findViewById(R.id.title);
+        TextView rating = findViewById(R.id.ratingTextView);
+        RatingBar ratingBar = findViewById(R.id.rating);
+        TextView overview = findViewById(R.id.overviewTextView);
+
+        fillData(poster, releaseDate, title, rating, ratingBar, overview);
+    }
+
+    private void fillData(ImageView poster, TextView releaseDate, TextView title, TextView rating,
+                          RatingBar ratingBar, TextView overview) {
         loadBackdrop(poster, Params.IMAGE_PATH.concat(Params.IMAGE_SIZE[3])
                 .concat(mMovie.getPosterPath()));
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                TextView releaseDate = findViewById(R.id.releaseDate);
-                releaseDate.setText(reformatDate(mMovie.getReleaseDate()));
-
-                TextView title = findViewById(R.id.title);
-                title.setText(mMovie.getTitle());
-
-                TextView rating = findViewById(R.id.ratingTextView);
-                rating.setText(mMovie.getVoteAverage()+ "/10");
-
-                RatingBar ratingBar = findViewById(R.id.rating);
-                ratingBar.setRating(mMovie.getVoteAverage() / 2f);
-
-                TextView overview = findViewById(R.id.overviewTextView);
-                overview.setText(mMovie.getOverview());
-            }
-        }, 250);
+        releaseDate.setText(reformatDate(mMovie.getReleaseDate()));
+        title.setText(mMovie.getTitle());
+        rating.setText(mMovie.getVoteAverage() + "/10");
+        ratingBar.setRating(mMovie.getVoteAverage() / 2f);
+        overview.setText(mMovie.getOverview());
     }
 
     private String reformatDate(String releaseDate) {
