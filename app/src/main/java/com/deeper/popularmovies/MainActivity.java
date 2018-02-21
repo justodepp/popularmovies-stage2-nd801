@@ -29,8 +29,15 @@ import com.deeper.popularmovies.model.MovieList;
 import com.deeper.popularmovies.utils.JsonUtils;
 import com.deeper.popularmovies.utils.NetworkUtils;
 import com.deeper.popularmovies.utils.Params;
+import com.deeper.popularmovies.utils.api.ApiEndPointHandler;
+import com.deeper.popularmovies.utils.api.ApiEndpointInterfaces;
+import com.deeper.popularmovies.utils.api.model.movieList.MovieListResponse;
 
 import java.net.URL;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -302,6 +309,40 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         return true;
+    }
+
+    private void callPopular(){
+        ApiEndpointInterfaces apiService = ApiEndPointHandler.getApiService(getApplicationContext());
+        Call<MovieListResponse> responsePopular = apiService.getPopular(ApiEndPointHandler.getDefaultParams(getApplicationContext()));
+
+        responsePopular.enqueue(new Callback<MovieListResponse>() {
+            @Override
+            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieListResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void callTopRated(){
+        ApiEndpointInterfaces apiService = ApiEndPointHandler.getApiService(getApplicationContext());
+        Call<MovieListResponse> responseTopRated = apiService.getTopRated(ApiEndPointHandler.getDefaultParams(getApplicationContext()));
+
+        responseTopRated.enqueue(new Callback<MovieListResponse>() {
+            @Override
+            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieListResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
 
