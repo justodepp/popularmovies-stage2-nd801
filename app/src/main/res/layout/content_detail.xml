@@ -64,14 +64,58 @@
             tools:text="5.6/10" />
 
         <TextView
-            android:id="@+id/overviewTextView"
+            android:id="@+id/overviewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/posterImageView"
             android:layout_marginEnd="@dimen/detail_horizontal_margin"
             android:layout_marginRight="@dimen/detail_horizontal_margin"
             android:layout_marginTop="@dimen/detail_generic_spacing"
+            tools:text="Overview" />
+
+        <TextView
+            android:id="@+id/overviewTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/overviewTitle"
+            android:layout_marginEnd="@dimen/detail_horizontal_margin"
+            android:layout_marginRight="@dimen/detail_horizontal_margin"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
             tools:text="Some text to display" />
+
+        <TextView
+            android:id="@+id/trailerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/overviewTextView"
+            android:layout_marginEnd="@dimen/detail_horizontal_margin"
+            android:layout_marginRight="@dimen/detail_horizontal_margin"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            tools:text="Trailer" />
+
+        <include
+            android:id="@+id/layout_trailer"
+            android:layout_below="@+id/trailerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/trailer_layout" />
+
+        <TextView
+            android:id="@+id/reviewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_trailer"
+            android:layout_marginEnd="@dimen/detail_horizontal_margin"
+            android:layout_marginRight="@dimen/detail_horizontal_margin"
+            android:layout_marginTop="@dimen/detail_generic_spacing"
+            tools:text="Reviews" />
+
+        <include
+            android:id="@+id/layout_review"
+            android:layout_below="@+id/reviewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/review_layout" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

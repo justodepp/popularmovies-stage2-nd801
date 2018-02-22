@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.deeper.popularmovies.R;
-import com.deeper.popularmovies.model.Movie;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
 import com.squareup.picasso.Picasso;
@@ -40,7 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     @Override
     public MovieHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_list, parent, false);
+        View view = inflater.inflate(R.layout.main_item_list, parent, false);
 
         return new MovieHolder(view);
     }
