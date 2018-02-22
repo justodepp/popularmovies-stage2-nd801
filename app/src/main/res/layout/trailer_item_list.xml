@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher"
+            tools:src="@drawable/ic_launcher_background"
             android:id="@+id/trailerImage"/>
 
         <LinearLayout

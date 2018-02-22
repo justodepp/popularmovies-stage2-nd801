@@ -1,7 +1,6 @@
 package com.deeper.popularmovies;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.deeper.popularmovies.model.Movie;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -58,7 +55,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private String reformatDate(String releaseDate) {
-        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD");
         Date newDate = null;
         try {
             newDate = format.parse(releaseDate);

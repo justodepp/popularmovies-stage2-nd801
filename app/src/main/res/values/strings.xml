@@ -8,6 +8,9 @@
     <string name="favourite">Favourite</string>
 
     <!-- Detail Activity-->
+    <string name="overview_txt">Overview</string>
+    <string name="trailer_txt">Trailers</string>
+    <string name="review_txt">Reviews</string>
     <string name="more_txt">More</string>
 
     <!-- Content descriptions-->
