@@ -1,7 +1,5 @@
 package com.deeper.popularmovies;
 
-import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -9,6 +7,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -146,9 +146,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return;
         }
 
+        // Ordinary Intent for launching a new activity
         Intent intent = new Intent(this, DetailActivity.class);
         DetailActivity.setMovieDetails(movieListResults.get(position));
-        startActivity(intent);
+        // Get the transition name from the string
+        String transitionName = getString(R.string.transition_string);
+
+        // Define the view that the animation will start from
+        View viewStart = findViewById(R.id.image_poster);
+
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        viewStart,   // Starting view
+                        transitionName    // The String
+                );
+        //Start the Intent
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     @Override
