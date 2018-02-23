@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ArrayList<MovieListResult> movieListResults = new ArrayList<>();
     private MovieAdapter movieAdapter;
@@ -72,8 +73,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         pageNum = 1;
 
-        mRecyclerView = findViewById(R.id.rv_main);
+        // Pull to Refresh
+        swipeRefreshLayout = findViewById(R.id.refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
+        mRecyclerView = findViewById(R.id.rv_main);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setHasFixedSize(true);
 
