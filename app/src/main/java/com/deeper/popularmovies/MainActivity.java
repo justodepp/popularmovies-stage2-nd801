@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // Pull to Refresh
         swipeRefreshLayout = findViewById(R.id.refresh);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        swipeRefreshLayout.setRefreshing(true);
+        //swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView = findViewById(R.id.rv_main);
@@ -162,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             errorNetwork();
             return;
         }
+        swipeRefreshLayout.setRefreshing(false);
+        mRecyclerView.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         callPopular();
     }
 
