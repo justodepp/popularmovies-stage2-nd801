@@ -3,6 +3,8 @@ package com.deeper.popularmovies;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,10 +23,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static MovieListResult mMovie;
     private Bundle extras;
+    private boolean favourite = false;
+    private FloatingActionButton fabFavourite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class DetailActivity extends AppCompatActivity {
         supportPostponeEnterTransition();
 
         extras = getIntent().getExtras();
+        fabFavourite = findViewById(R.id.fab_favourite);
+        fabFavourite.setOnClickListener(this);
 
         settingsToolbar();
         initView();
@@ -166,5 +172,22 @@ public class DetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.fab_favourite){
+            if(!favourite) {
+                fabFavourite.setImageResource(R.drawable.ic_favourite_on);
+                favourite = true;
+                Snackbar.make(view, "Salvato tra i preferiti!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                fabFavourite.setImageResource(R.drawable.ic_favourite_off);
+                favourite = false;
+                Snackbar.make(view, "Eliminato dai preferiti!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        }
     }
 }
