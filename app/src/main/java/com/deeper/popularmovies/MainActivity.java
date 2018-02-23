@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -80,6 +82,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Fade fade = new Fade();
+            fade.excludeTarget(R.id.appbar, true);
+            fade.excludeTarget(android.R.id.statusBarBackground, true);
+            fade.excludeTarget(android.R.id.navigationBarBackground, true);
+
+            getWindow().setEnterTransition(fade);
+            getWindow().setExitTransition(fade);
+        }
 
         if (savedInstanceState != null) {
             String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);

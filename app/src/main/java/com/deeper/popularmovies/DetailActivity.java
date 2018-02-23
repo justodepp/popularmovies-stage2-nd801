@@ -118,6 +118,7 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         scheduleStartPostponedTransition(backdrop);
+                        //supportStartPostponedEnterTransition();
                     }
 
                     @Override
