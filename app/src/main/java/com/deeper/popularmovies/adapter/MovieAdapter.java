@@ -1,6 +1,7 @@
 package com.deeper.popularmovies.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     private final MovieClickListener mMovieClickListener;
 
     public interface MovieClickListener {
-        void onClickMovie(int position);
+        void onClickMovie(int position, MovieListResult movie, ImageView clickedImage);
     }
 
     public MovieAdapter(Context context, ArrayList<MovieListResult> movies, MovieClickListener movieClickListener){
@@ -68,14 +69,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             Picasso.with(context)
                     .load(Params.IMAGE_PATH.concat(Params.IMAGE_SIZE[2])
                             .concat(movies.get(position).getPosterPath()))
-
                     .into(imageViewHolder);
+
+            ViewCompat.setTransitionName(imageViewHolder, String.valueOf(movies.get(position).getId()));
         }
 
         @Override
         public void onClick(View view) {
             int clickPosition = getAdapterPosition();
-            mMovieClickListener.onClickMovie(clickPosition);
+            mMovieClickListener.onClickMovie(clickPosition, movies.get(clickPosition), imageViewHolder);
         }
     }
 }

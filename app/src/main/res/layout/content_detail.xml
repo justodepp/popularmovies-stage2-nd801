@@ -17,8 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/detail_generic_spacing"
-            tools:src="@mipmap/ic_launcher"
-            android:transitionName="@string/transition_string" />
+            tools:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/releaseDate"

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,12 +17,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deeper.popularmovies.adapter.MovieAdapter;
-import com.deeper.popularmovies.model.MovieList;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.utils.api.ApiEndPointHandler;
 import com.deeper.popularmovies.utils.api.ApiEndpointInterfaces;
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         BottomNavigationView.OnNavigationItemSelectedListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String EXTRA_IMAGE_TRANSITION_NAME = "transition_name";
 
-    private String queryMovie;
     private String nameSort;
     private int pageNum;
 
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar mLoadingIndicator;
 
     private RecyclerView mRecyclerView;
-    private MovieList movieList;
     private ArrayList<MovieListResult> movieListResults = new ArrayList<>();
     private MovieAdapter movieAdapter;
     private BottomNavigationView bottomNavigationView;
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        queryMovie = "popular";
         pageNum = 1;
 
         mRecyclerView = findViewById(R.id.rv_main);
@@ -140,31 +139,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onClickMovie(int position) {
-        if (!isOnline()) {
-            errorNetwork();
-            return;
-        }
-
-        // Ordinary Intent for launching a new activity
-        Intent intent = new Intent(this, DetailActivity.class);
-        DetailActivity.setMovieDetails(movieListResults.get(position));
-        // Get the transition name from the string
-        String transitionName = getString(R.string.transition_string);
-
-        // Define the view that the animation will start from
-        View viewStart = findViewById(R.id.image_poster);
-
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                        viewStart,   // Starting view
-                        transitionName    // The String
-                );
-        //Start the Intent
-        ActivityCompat.startActivity(this, intent, options.toBundle());
-    }
-
-    @Override
     public void onRefresh() {
         if (!isOnline()) {
             errorNetwork();
@@ -180,14 +154,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int id = item.getItemId();
         switch (id) {
             case R.id.action_popular:
-                queryMovie = "popular";
                 callPopular();
                 //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Popular Movies";
                 setTitle(nameSort);
                 break;
             case R.id.action_top_rated:
-                queryMovie = "top_rated";
                 callTopRated();
                 //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Top Rated Movies";
@@ -200,6 +172,33 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onClickMovie(int position, MovieListResult movie, ImageView clickedImage) {
+        if (!isOnline()) {
+            errorNetwork();
+            return;
+        }
+
+        // Ordinary Intent for launching a new activity
+        Intent intent = new Intent(this, DetailActivity.class);
+        DetailActivity.setMovieDetails(movieListResults.get(position));
+        intent.putExtra(EXTRA_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(clickedImage));
+
+        // Get the transition name from the string
+        //String transitionName = getString(R.string.transition_string);
+        // Define the view that the animation will start from
+        //View viewStart = findViewById(R.id.image_poster);
+
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        clickedImage,   // Starting view
+                        ViewCompat.getTransitionName(clickedImage)    // The String
+                );
+        //Start the Intent
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     private void callPopular(){
