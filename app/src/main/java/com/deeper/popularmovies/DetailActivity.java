@@ -1,5 +1,6 @@
 package com.deeper.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -28,6 +29,7 @@ import com.deeper.popularmovies.api.model.reviews.ReviewResponse;
 import com.deeper.popularmovies.api.model.reviews.ReviewResult;
 import com.deeper.popularmovies.api.model.videos.VideoResponse;
 import com.deeper.popularmovies.api.model.videos.VideoResult;
+import com.deeper.popularmovies.ui.ReviewDialog;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.deeper.popularmovies.utils.Utility;
@@ -254,7 +256,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     reviewAdapter = new ReviewAdapter(reviewResults, DetailActivity.this);
                     rvReview.setAdapter(reviewAdapter);
 
-                    showData(rvReview, pbReview, errorReview);
+                    if(reviewResults.size()>0)
+                        showData(rvReview, pbReview, errorReview);
+                    else showError(rvReview, pbReview, errorReview);
                 }
             }
 
@@ -289,10 +293,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(@NonNull Call<VideoResponse> call, @NonNull Response<VideoResponse> response) {
                 if(response.isSuccessful()){
                     videoResults.addAll(response.body().getResults());
-                    videoAdapter = new VideoAdapter(videoResults, DetailActivity.this);
+                    videoAdapter = new VideoAdapter(DetailActivity.this, videoResults, DetailActivity.this);
                     rvTrailer.setAdapter(videoAdapter);
 
-                    showData(rvTrailer, pbTrailer, errorTrailer);
+                    if(videoResults.size()>0)
+                        showData(rvTrailer, pbTrailer, errorTrailer);
+                    else showError(rvTrailer, pbTrailer, errorTrailer);
                 }
             }
 
@@ -305,11 +311,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClickReview(ReviewResult review) {
-
+        ReviewDialog dialog = new ReviewDialog().setReview(review);
+        dialog.setCancelable(true);
+        dialog.show(getSupportFragmentManager(), ReviewDialog.class.getSimpleName());
     }
 
     @Override
     public void onClickVideo(VideoResult video) {
-
+        startActivity(Utility.getYoutubeVideoIntent(video.getKey()));
     }
 }

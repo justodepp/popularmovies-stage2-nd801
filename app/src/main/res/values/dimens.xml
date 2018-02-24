@@ -6,4 +6,5 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="text_size">20sp</dimen>
+    <dimen name="text_size_error">16sp</dimen>
 </resources>

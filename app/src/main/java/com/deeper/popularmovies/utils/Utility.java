@@ -3,12 +3,14 @@ package com.deeper.popularmovies.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -24,6 +26,12 @@ import java.util.Locale;
 public class Utility {
 
     private final static String TAG = "Utility";
+
+    private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
+    private static final String YOUTUBE_VIDEO_PARAM = "v";
+
+    private static final String YOUTUBE_IMAGE_BASE_URL = "http://img.youtube.com/vi";
+    public static final String[] IMAGE_QUALITY = {"mqdefault.jpg", "0.jpg", "maxresdefault.jpg"};
 
     @SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
@@ -255,5 +263,21 @@ public class Utility {
 
         format = new SimpleDateFormat("EEE, d MMM yyyy");
         return format.format(newDate);
+    }
+
+    public static Intent getYoutubeVideoIntent(String key) {
+        Uri uri = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendQueryParameter(YOUTUBE_VIDEO_PARAM, key)
+                .build();
+
+        return new Intent(Intent.ACTION_VIEW, uri);
+    }
+
+    public static Uri getYoutubeThumb(String key, String quality) {
+        Uri uri = Uri.parse(YOUTUBE_IMAGE_BASE_URL).buildUpon()
+                .appendPath(key)
+                .appendPath(quality)
+                .build();
+        return uri;
     }
 }

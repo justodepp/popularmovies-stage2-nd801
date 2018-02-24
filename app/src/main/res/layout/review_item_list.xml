@@ -9,7 +9,7 @@
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true"
-    card_view:contentPadding="8dp">
+    card_view:contentPadding="16dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,20 +19,19 @@
             android:id="@+id/reviewAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            card_view:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="8dp"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             tools:text="author" />
 
         <TextView
             android:id="@+id/reviewContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             card_view:layout_constraintTop_toBottomOf="@+id/reviewAuthor"
             card_view:layout_constraintBottom_toTopOf="@+id/statusCollapsed"
-            card_view:layout_constraintStart_toStartOf="@+id/reviewAuthor"
-            tools:text="Some text to display" />
+            tools:text="Some text to display"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/statusCollapsed"

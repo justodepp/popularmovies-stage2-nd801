@@ -121,7 +121,8 @@
             android:layout_below="@+id/reviewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/review_layout" />
+            layout="@layout/review_layout"
+            android:layout_marginBottom="@dimen/detail_generic_spacing"/>
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
