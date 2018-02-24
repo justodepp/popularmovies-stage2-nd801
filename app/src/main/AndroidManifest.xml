@@ -23,6 +23,10 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-    </application>
 
+        <provider
+            android:name=".db.MovieProvider"
+            android:authorities="com.deeper.popularmovies"
+            android:exported="false"/>
+    </application>
 </manifest>

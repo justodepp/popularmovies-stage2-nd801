@@ -8,6 +8,11 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class VideoResult {
+
+    public static final String ID = "id";
+    public static final String KEY = "key";
+    public static final String NAME = "name";
+
     @SerializedName("id")
     @Expose
     private String id;

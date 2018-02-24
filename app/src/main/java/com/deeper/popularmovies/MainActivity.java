@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 Toast.makeText(this, "Coming soon.", Toast.LENGTH_SHORT).show();
                 nameSort = "Favourite";
                 setTitle(nameSort);
+                // TODO: show favorite, change ArrayList data!
                 break;
         }
         return true;

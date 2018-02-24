@@ -10,6 +10,9 @@ import java.util.List;
  */
 
 public class ReviewResponse {
+
+    public static final String MOVIE_ID = "id";
+
     @SerializedName("id")
     @Expose
     private Integer id;

@@ -209,11 +209,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 favourite = true;
                 Snackbar.make(view, "Salvato tra i preferiti!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                MovieListResult.setFavorite(favourite);
             } else {
                 fabFavourite.setImageResource(R.drawable.ic_favourite_off);
                 favourite = false;
                 Snackbar.make(view, "Eliminato dai preferiti!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                MovieListResult.setFavorite(favourite);
             }
         }
     }

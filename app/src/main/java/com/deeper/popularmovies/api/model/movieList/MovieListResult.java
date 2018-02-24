@@ -10,6 +10,15 @@ import java.util.List;
  */
 
 public class MovieListResult {
+
+    public static final String ID = "id";
+    public static final String VOTE_AVERAGE = "vote_average";
+    public static final String POSTER_PATH = "poster_path";
+    public static final String ORIGINAL_TITLE = "original_title";
+    public static final String OVERVIEW = "overview";
+    public static final String RELEASE_DATE = "release_date";
+    public static final String BACKDROP_PATH = "backdrop_path";
+
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
@@ -52,6 +61,8 @@ public class MovieListResult {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+
+    private static boolean favorite;
 
     public Integer getVoteCount() {
         return voteCount;
@@ -163,5 +174,14 @@ public class MovieListResult {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+
+    public static boolean getFavorite() {
+        return favorite;
+    }
+
+    public static void setFavorite(boolean favorite) {
+        MovieListResult.favorite = favorite;
     }
 }
