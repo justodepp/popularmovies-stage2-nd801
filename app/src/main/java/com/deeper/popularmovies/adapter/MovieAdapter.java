@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.deeper.popularmovies.R;
 import com.deeper.popularmovies.utils.Params;
-import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
+import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

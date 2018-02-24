@@ -1,4 +1,4 @@
-package com.deeper.popularmovies.utils.api.model.movie;
+package com.deeper.popularmovies.api.model.movie;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

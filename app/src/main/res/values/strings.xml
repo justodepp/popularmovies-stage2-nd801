@@ -16,7 +16,8 @@
     <!-- Content descriptions-->
 
     <!-- Error messages-->
-    <string name="error_message">Data not available.\nCheck you network connection and retry</string>
+    <string name="main_error_message">Data not available.\nCheck you network connection and retry</string>
+    <string name="error_message">Data not available.</string>
     <string name="no_api_key">To perform a query API KEY is required</string>
 
     <!-- Transition string -->

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -241,5 +242,18 @@ public class Utility {
 
             return null;
         }
+    }
+
+    public static String reformatDate(String releaseDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD");
+        Date newDate = null;
+        try {
+            newDate = format.parse(releaseDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        format = new SimpleDateFormat("EEE, d MMM yyyy");
+        return format.format(newDate);
     }
 }

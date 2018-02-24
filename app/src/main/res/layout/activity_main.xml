@@ -50,7 +50,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/error_message"
+            android:text="@string/main_error_message"
             android:textSize="@dimen/text_size"
             android:layout_centerInParent="true"
             android:textStyle="bold"/>

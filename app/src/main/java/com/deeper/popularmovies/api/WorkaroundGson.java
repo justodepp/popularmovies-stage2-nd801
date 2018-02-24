@@ -1,4 +1,4 @@
-package com.deeper.popularmovies.utils.api;
+package com.deeper.popularmovies.api;
 
 import android.util.Log;
 

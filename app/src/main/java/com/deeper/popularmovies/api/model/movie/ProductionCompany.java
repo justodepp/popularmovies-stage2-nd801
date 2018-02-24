@@ -1,4 +1,4 @@
-package com.deeper.popularmovies.utils.api.model.movie;
+package com.deeper.popularmovies.api.model.movie;
 
 /**
  * Created by Gianni on 21/02/18.
@@ -7,22 +7,14 @@ package com.deeper.popularmovies.utils.api.model.movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductionCountry {
+public class ProductionCompany {
 
-    @SerializedName("iso_3166_1")
-    @Expose
-    private String iso31661;
     @SerializedName("name")
     @Expose
     private String name;
-
-    public String getIso31661() {
-        return iso31661;
-    }
-
-    public void setIso31661(String iso31661) {
-        this.iso31661 = iso31661;
-    }
+    @SerializedName("id")
+    @Expose
+    private Integer id;
 
     public String getName() {
         return name;
@@ -30,6 +22,14 @@ public class ProductionCountry {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

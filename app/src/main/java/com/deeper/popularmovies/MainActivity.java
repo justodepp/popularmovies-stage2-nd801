@@ -25,11 +25,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deeper.popularmovies.adapter.MovieAdapter;
+import com.deeper.popularmovies.api.ApiEndPointHandler;
+import com.deeper.popularmovies.api.ApiEndpointInterfaces;
 import com.deeper.popularmovies.utils.Params;
-import com.deeper.popularmovies.utils.api.ApiEndPointHandler;
-import com.deeper.popularmovies.utils.api.ApiEndpointInterfaces;
-import com.deeper.popularmovies.utils.api.model.movieList.MovieListResponse;
-import com.deeper.popularmovies.utils.api.model.movieList.MovieListResult;
+import com.deeper.popularmovies.api.model.movieList.MovieListResponse;
+import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 
 import java.util.ArrayList;
 

@@ -1,13 +1,16 @@
-package com.deeper.popularmovies.utils.api;
+package com.deeper.popularmovies.api;
 
-import com.deeper.popularmovies.utils.api.model.movie.MovieResponse;
-import com.deeper.popularmovies.utils.api.model.movieList.MovieListResponse;
+import com.deeper.popularmovies.api.model.movie.MovieResponse;
+import com.deeper.popularmovies.api.model.movieList.MovieListResponse;
+import com.deeper.popularmovies.api.model.reviews.ReviewResponse;
+import com.deeper.popularmovies.api.model.videos.VideoResponse;
 
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -22,8 +25,20 @@ public interface ApiEndpointInterfaces {
     @GET("top_rated")
     Call<MovieListResponse> getTopRated(@QueryMap Map<String, String> params);
 
+    @GET("popular")
+    Call<MovieListResponse> getPagePopular(@Query("page") String page, @QueryMap Map<String, String> params);
+
+    @GET("top_rated")
+    Call<MovieListResponse> getPageTopRated(@Query("page") String page, @QueryMap Map<String, String> params);
+
     @GET("{id_movie}")
     Call<MovieResponse> getMovie(@Path("id_movie") String idMovie, @QueryMap Map<String, String> params);
+
+    @GET("{id_movie}/reviews")
+    Call<ReviewResponse> getReviews(@Path("id_movie") String idMovie, @QueryMap Map<String, String> params);
+
+    @GET("{id_movie}/videos")
+    Call<VideoResponse> getVideos(@Path("id_movie") String idMovie, @QueryMap Map<String, String> params);
 
     /*@GET("menu")
     Call<MenuResponse> getMenu(@QueryMap Map<String, String> params);
