@@ -85,6 +85,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         fabFavourite = findViewById(R.id.fab_favourite);
         fabFavourite.setOnClickListener(this);
 
+        updateFavoriteFAB(mMovie, false);
+
         settingsToolbar();
         initView();
 
@@ -206,6 +208,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         int id = item.getItemId();
         if (id == android.R.id.home) {
             supportFinishAfterTransition();
+            super.onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -217,7 +220,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             onUpdateFavorite(mMovie, new FavouriteListener() {
                 @Override
                 public void onFavouriteUpdated(MovieListResult movie) {
-                    updateFavoriteFAB(movie);
+                    updateFavoriteFAB(movie, true);
                 }
             });
         }
@@ -361,16 +364,18 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         listener.onFavouriteUpdated(movie);
     }
 
-    private void updateFavoriteFAB(MovieListResult movie) {
+    private void updateFavoriteFAB(MovieListResult movie, boolean click) {
         if(movie.getFavorite()) {
             fabFavourite.setImageResource(R.drawable.ic_favourite_on);
-            Snackbar.make(fabFavourite, "Salvato tra i preferiti!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            if(click)
+                Snackbar.make(fabFavourite, "Salvato tra i preferiti!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             movie.setFavorite(true);
         } else {
             fabFavourite.setImageResource(R.drawable.ic_favourite_off);
-            Snackbar.make(fabFavourite, "Eliminato dai preferiti!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            if(click)
+                Snackbar.make(fabFavourite, "Eliminato dai preferiti!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             movie.setFavorite(false);
         }
     }
@@ -425,7 +430,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
             if (cursor != null) cursor.close();
 
-            updateFavoriteFAB(mMovie);
+            updateFavoriteFAB(mMovie, false);
         }
         else {
             callReview();

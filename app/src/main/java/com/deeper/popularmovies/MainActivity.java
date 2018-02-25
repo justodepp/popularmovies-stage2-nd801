@@ -36,7 +36,6 @@ import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,7 +72,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Stetho.initializeWithDefaults(this);
+        //Stetho.initializeWithDefaults(this);
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -325,11 +331,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 movie.setBackdropPath(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_BACKDROP_PATH)));
                 movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
 
+                movie.setFavorite(true);
+
                 movies.add(movie);
         }
 
         listener.onMovieLoaded(movies);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        movieAdapter.notifyDataSetChanged();
+    }
 }
 

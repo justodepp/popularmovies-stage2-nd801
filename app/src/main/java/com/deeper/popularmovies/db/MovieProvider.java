@@ -209,7 +209,30 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        throw new RuntimeException("GetType is not implemented.");
+        switch (sUriMatcher.match(uri)){
+            case CODE_MOVIES:{
+                return MoviesContract.MovieEntry.CONTENT_DIR_TYPE;
+            }
+            case CODE_MOVIE_WITH_ID:{
+                return MoviesContract.MovieEntry.CONTENT_ITEM_TYPE;
+            }
+            case CODE_REVIEWS:{
+                return MoviesContract.ReviewEntry.CONTENT_DIR_TYPE;
+            }
+            case CODE_REVIEWS_WITH_ID:{
+                return MoviesContract.ReviewEntry.CONTENT_ITEM_TYPE;
+            }
+            case CODE_VIDEOS:{
+                return MoviesContract.VideoEntry.CONTENT_DIR_TYPE;
+            }
+            case CODE_VIDEOS_WITH_ID:{
+                return MoviesContract.VideoEntry.CONTENT_ITEM_TYPE;
+            }
+            default:{
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+            }
+        }
+        //throw new RuntimeException("GetType is not implemented.");
     }
 
     @Override
