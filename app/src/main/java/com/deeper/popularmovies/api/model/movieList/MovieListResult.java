@@ -62,7 +62,7 @@ public class MovieListResult {
     @Expose
     private String releaseDate;
 
-    private static boolean favorite;
+    private boolean favorite;
 
     public Integer getVoteCount() {
         return voteCount;
@@ -177,11 +177,11 @@ public class MovieListResult {
     }
 
 
-    public static boolean getFavorite() {
+    public boolean getFavorite() {
         return favorite;
     }
 
-    public static void setFavorite(boolean favorite) {
-        MovieListResult.favorite = favorite;
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

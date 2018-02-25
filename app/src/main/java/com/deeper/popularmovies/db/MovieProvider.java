@@ -54,14 +54,14 @@ public class MovieProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
 
             case CODE_REVIEWS:
-            case CODE_REVIEWS_WITH_ID:
-                tableName = MoviesContract.ReviewEntry.TABLE_NAME;
-                break;
+                case CODE_REVIEWS_WITH_ID:
+                    tableName = MoviesContract.ReviewEntry.TABLE_NAME;
+                    break;
 
             case CODE_VIDEOS:
-            case CODE_VIDEOS_WITH_ID:
-                tableName = MoviesContract.VideoEntry.TABLE_NAME;
-                break;
+                case CODE_VIDEOS_WITH_ID:
+                    tableName = MoviesContract.VideoEntry.TABLE_NAME;
+                    break;
 
             default:
                 return super.bulkInsert(uri, values);
@@ -167,7 +167,6 @@ public class MovieProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         String tableName;
-        Uri returnUri;
         switch (sUriMatcher.match(uri)) {
             case CODE_MOVIE_WITH_ID:
                 tableName = MoviesContract.MovieEntry.TABLE_NAME;

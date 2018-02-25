@@ -2,6 +2,7 @@ package com.deeper.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -27,11 +28,15 @@ import android.widget.Toast;
 import com.deeper.popularmovies.adapter.MovieAdapter;
 import com.deeper.popularmovies.api.ApiEndPointHandler;
 import com.deeper.popularmovies.api.ApiEndpointInterfaces;
+import com.deeper.popularmovies.db.MoviesContract;
+import com.deeper.popularmovies.db.MoviesContract.MovieEntry;
 import com.deeper.popularmovies.utils.Params;
 import com.deeper.popularmovies.api.model.movieList.MovieListResponse;
 import com.deeper.popularmovies.api.model.movieList.MovieListResult;
+import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private int pageNum;
 
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
-    private static final String SEARCH_QUERY_SORT = "search";
-    private static final String SEARCH_QUERY_PAGE = "page";
-
-    private static final int MOVIEDB_SEARCH_LOADER = 23;
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
@@ -63,10 +64,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MovieAdapter movieAdapter;
     private BottomNavigationView bottomNavigationView;
 
+    public interface MovieListener {
+        void onMovieLoaded(ArrayList<MovieListResult> movieList);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Stetho.initializeWithDefaults(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void showErrorMessage() {
         /* First, hide the currently visible data */
         mRecyclerView.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
         bottomNavigationView.setVisibility(View.GONE);
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
@@ -176,21 +184,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         switch (id) {
             case R.id.action_popular:
                 callPopular();
-                //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Popular Movies";
                 setTitle(nameSort);
                 break;
             case R.id.action_top_rated:
                 callTopRated();
-                //makeMovieDbSearchQuery(queryMovie, pageNum);
                 nameSort = "Top Rated Movies";
                 setTitle(nameSort);
                 break;
             case R.id.action_favorites:
-                Toast.makeText(this, "Coming soon.", Toast.LENGTH_SHORT).show();
+                callFavorite();
                 nameSort = "Favourite";
                 setTitle(nameSort);
-                // TODO: show favorite, change ArrayList data!
+                swipeRefreshLayout.setEnabled(false);
                 break;
         }
         return true;
@@ -205,14 +211,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         // Ordinary Intent for launching a new activity
         Intent intent = new Intent(this, DetailActivity.class);
-        DetailActivity.setMovieDetails(movieListResults.get(position));
+        DetailActivity.setMovieDetails(movie);
         intent.putExtra(EXTRA_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(clickedImage));
 
         // Get the transition name from the string
         //String transitionName = getString(R.string.transition_string);
         // Define the view that the animation will start from
         //View viewStart = findViewById(R.id.image_poster);
-
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
@@ -274,5 +279,57 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
         });
     }
+
+    private void callFavorite(){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+
+        cursorMovie(getContentResolver().query(
+                MovieEntry.CONTENT_URI,
+                MoviesContract.projectionMovie,
+                null,
+                null,
+                null
+        ), new MovieListener() {
+            @Override
+            public void onMovieLoaded(ArrayList<MovieListResult> movieList) {
+                ArrayList<MovieListResult> movies = new ArrayList<>();
+                movies.addAll(movieList);
+                movieAdapter = new MovieAdapter(MainActivity.this, movies, MainActivity.this);
+                mRecyclerView.setAdapter(movieAdapter);
+
+                if(movieListResults.size() > 0)
+                    showJsonDataView();
+                else {
+                    mLoadingIndicator.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this,
+                            "No Favourite available", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void cursorMovie(Cursor cursor, MovieListener listener) {
+        ArrayList<MovieListResult> movies = new ArrayList<>();
+
+        if (cursor != null)
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+
+                MovieListResult movie = new MovieListResult();
+
+                movie.setId(Integer.valueOf(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_ID))));
+                movie.setVoteAverage(cursor.getFloat(cursor.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
+                movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH)));
+                movie.setOriginalTitle(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_ORIGINAL_TITLE)));
+                movie.setOverview(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)));
+                movie.setBackdropPath(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_BACKDROP_PATH)));
+                movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
+
+                movies.add(movie);
+        }
+
+        listener.onMovieLoaded(movies);
+    }
+
 }
 

@@ -13,6 +13,8 @@ public class ReviewResult {
     public static final String AUTHOR = "author";
     public static final String CONTENT = "content";
 
+    public static final String MOVIE_ID = "movie_id";
+
     @SerializedName("id")
     @Expose
     private String id;
@@ -25,6 +27,8 @@ public class ReviewResult {
     @SerializedName("url")
     @Expose
     private String url;
+
+    private String movieId;
 
     public String getId() {
         return id;
@@ -56,5 +60,13 @@ public class ReviewResult {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
     }
 }

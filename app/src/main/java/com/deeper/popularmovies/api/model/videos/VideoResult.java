@@ -13,6 +13,8 @@ public class VideoResult {
     public static final String KEY = "key";
     public static final String NAME = "name";
 
+    public static final String MOVIE_ID = "movie_id";
+
     @SerializedName("id")
     @Expose
     private String id;
@@ -37,6 +39,8 @@ public class VideoResult {
     @SerializedName("type")
     @Expose
     private String type;
+
+    private String movieId;
 
     public String getId() {
         return id;
@@ -102,4 +106,12 @@ public class VideoResult {
         this.type = type;
     }
 
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
 }

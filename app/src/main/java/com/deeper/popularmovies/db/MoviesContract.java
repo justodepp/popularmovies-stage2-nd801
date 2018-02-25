@@ -3,9 +3,7 @@ package com.deeper.popularmovies.db;
 import android.net.Uri;
 
 import com.deeper.popularmovies.api.model.movieList.MovieListResult;
-import com.deeper.popularmovies.api.model.reviews.ReviewResponse;
 import com.deeper.popularmovies.api.model.reviews.ReviewResult;
-import com.deeper.popularmovies.api.model.videos.VideoResponse;
 import com.deeper.popularmovies.api.model.videos.VideoResult;
 
 public class MoviesContract {
@@ -16,6 +14,30 @@ public class MoviesContract {
     public static final String PATH_MOVIES = "movies";
     public static final String PATH_REVIEWS = "reviews";
     public static final String PATH_VIDEOS = "videos";
+
+    public static final String[] projectionMovie = {
+            MovieEntry.COLUMN_ID,
+            MovieEntry.COLUMN_VOTE_AVERAGE,
+            MovieEntry.COLUMN_POSTER_PATH,
+            MovieEntry.COLUMN_ORIGINAL_TITLE,
+            MovieEntry.COLUMN_OVERVIEW,
+            MovieEntry.COLUMN_BACKDROP_PATH,
+            MovieEntry.COLUMN_RELEASE_DATE
+    };
+
+    public static final String[] projectionReview = {
+            ReviewEntry.COLUMN_ID,
+            ReviewEntry.COLUMN_AUTHOR,
+            ReviewEntry.COLUMN_CONTENT,
+            ReviewEntry.COLUMN_MOVIE_ID
+    };
+
+    public static final String[] projectionTrailer = {
+            VideoEntry.COLUMN_ID,
+            VideoEntry.COLUMN_KEY,
+            VideoEntry.COLUMN_NAME,
+            VideoEntry.COLUMN_MOVIE_ID
+    };
 
     public static final class MovieEntry {
 
@@ -51,7 +73,7 @@ public class MoviesContract {
         public static final String COLUMN_ID = ReviewResult.ID;
         public static final String COLUMN_AUTHOR = ReviewResult.AUTHOR;
         public static final String COLUMN_CONTENT = ReviewResult.CONTENT;
-        public static final String COLUMN_MOVIE_ID = ReviewResponse.MOVIE_ID;
+        public static final String COLUMN_MOVIE_ID = ReviewResult.MOVIE_ID;
 
         public static Uri buildReviewsUri(int movie_id) {
             return CONTENT_URI.buildUpon()
@@ -71,7 +93,7 @@ public class MoviesContract {
         public static final String COLUMN_ID = VideoResult.ID;
         public static final String COLUMN_KEY = "video_" + VideoResult.KEY;
         public static final String COLUMN_NAME = VideoResult.NAME;
-        public static final String COLUMN_MOVIE_ID = VideoResponse.MOVIE_ID;
+        public static final String COLUMN_MOVIE_ID = VideoResult.MOVIE_ID;
 
         public static Uri buildVideosUri(int movie_id) {
             return CONTENT_URI.buildUpon()
