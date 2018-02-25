@@ -53,7 +53,7 @@ public class MoviesContract {
         public static final String COLUMN_CONTENT = ReviewResult.CONTENT;
         public static final String COLUMN_MOVIE_ID = ReviewResponse.MOVIE_ID;
 
-        public static Uri buildMovieReviewsUri(int movie_id) {
+        public static Uri buildReviewsUri(int movie_id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(movie_id))
                     .build();
@@ -73,7 +73,7 @@ public class MoviesContract {
         public static final String COLUMN_NAME = VideoResult.NAME;
         public static final String COLUMN_MOVIE_ID = VideoResponse.MOVIE_ID;
 
-        public static Uri buildMovieVideosUri(int movie_id) {
+        public static Uri buildVideosUri(int movie_id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(movie_id))
                     .build();

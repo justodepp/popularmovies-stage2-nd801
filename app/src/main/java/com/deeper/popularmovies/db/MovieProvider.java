@@ -1,6 +1,7 @@
 package com.deeper.popularmovies.db;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -122,7 +123,7 @@ public class MovieProvider extends ContentProvider {
                 selectionArgs,
                 null,
                 null,
-                null);
+                sortOrder);
 
         cursorMovies.setNotificationUri(getContext().getContentResolver(), uri);
         return cursorMovies;
@@ -162,15 +163,11 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(@NonNull Uri uri) {
-        throw new RuntimeException("GetType is not implemented.");
-    }
-
-    @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         String tableName;
+        Uri returnUri;
         switch (sUriMatcher.match(uri)) {
             case CODE_MOVIE_WITH_ID:
                 tableName = MoviesContract.MovieEntry.TABLE_NAME;
@@ -185,7 +182,7 @@ public class MovieProvider extends ContentProvider {
                 break;
 
             default:
-                throw new RuntimeException("Command not recognised by this provider.");
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
         db.beginTransaction();
@@ -209,6 +206,11 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new RuntimeException("Update is not implemented");
+    }
+
+    @Override
+    public String getType(@NonNull Uri uri) {
+        throw new RuntimeException("GetType is not implemented.");
     }
 
     @Override

@@ -10,13 +10,18 @@ import com.deeper.popularmovies.db.MoviesContract.ReviewEntry;
 
 public class MoviesDatabaseHelper extends SQLiteOpenHelper {
 
+    // The name of the database
     public static final String DATABASE_NAME = "movies.db";
+    // If you change the database schema, you must increment the database version
     private static final int DATABASE_VERSION = 1;
 
     public MoviesDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Called when the tasks database is created for the first time.
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -27,6 +32,7 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
                         MovieEntry.COLUMN_OVERVIEW         + " TEXT NOT NULL, "       +
                         MovieEntry.COLUMN_POSTER_PATH      + " TEXT NOT NULL, "       +
                         MovieEntry.COLUMN_RELEASE_DATE     + " INTEGER NOT NULL, "    +
+                        MovieEntry.COLUMN_BACKDROP_PATH    + " TEXT NOT NULL, "       +
                         MovieEntry.COLUMN_VOTE_AVERAGE     + " REAL NOT NULL"         +
                         ");";
 
@@ -51,6 +57,10 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_VIDEOS_TABLE);
     }
 
+    /**
+     * This method discards the old table of data and calls onCreate to recreate a new one.
+     * This only occurs when the version number for this database (DATABASE_VERSION) is incremented.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME);
