@@ -252,6 +252,13 @@ public class Utility {
         }
     }
 
+    public static int getSpan(Context context) {
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return 4;
+        }
+        return 2;
+    }
+
     public static String reformatDate(String releaseDate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD");
         Date newDate = null;

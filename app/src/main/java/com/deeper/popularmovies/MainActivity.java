@@ -1,5 +1,6 @@
 package com.deeper.popularmovies;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,11 +29,12 @@ import android.widget.Toast;
 import com.deeper.popularmovies.adapter.MovieAdapter;
 import com.deeper.popularmovies.api.ApiEndPointHandler;
 import com.deeper.popularmovies.api.ApiEndpointInterfaces;
+import com.deeper.popularmovies.api.model.movieList.MovieListResponse;
+import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.deeper.popularmovies.db.MoviesContract;
 import com.deeper.popularmovies.db.MoviesContract.MovieEntry;
 import com.deeper.popularmovies.utils.Params;
-import com.deeper.popularmovies.api.model.movieList.MovieListResponse;
-import com.deeper.popularmovies.api.model.movieList.MovieListResult;
+import com.deeper.popularmovies.utils.Utility;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         swipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView = findViewById(R.id.rv_main);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Utility.getSpan(this)));
         mRecyclerView.setHasFixedSize(true);
 
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
@@ -231,7 +233,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                         ViewCompat.getTransitionName(clickedImage)    // The String
                 );
         //Start the Intent
-        ActivityCompat.startActivity(this, intent, options.toBundle());
+        ActivityCompat.startActivityForResult(this, intent, 1,options.toBundle());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_CANCELED){
+                refreshData();
+            }
+        }
     }
 
     private void callPopular(){
@@ -339,9 +350,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         listener.onMovieLoaded(movies);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private void refreshData(){
         movieAdapter.notifyDataSetChanged();
     }
 }

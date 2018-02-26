@@ -1,6 +1,8 @@
 package com.deeper.popularmovies;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.deeper.popularmovies.adapter.ReviewAdapter;
 import com.deeper.popularmovies.adapter.VideoAdapter;
 import com.deeper.popularmovies.api.ApiEndPointHandler;
 import com.deeper.popularmovies.api.ApiEndpointInterfaces;
+import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.deeper.popularmovies.api.model.reviews.ReviewResponse;
 import com.deeper.popularmovies.api.model.reviews.ReviewResult;
 import com.deeper.popularmovies.api.model.videos.VideoResponse;
@@ -34,11 +37,10 @@ import com.deeper.popularmovies.db.MoviesContract.VideoEntry;
 import com.deeper.popularmovies.ui.ReviewDialog;
 import com.deeper.popularmovies.utils.ContentValuesHelper;
 import com.deeper.popularmovies.utils.Params;
-import com.deeper.popularmovies.api.model.movieList.MovieListResult;
 import com.deeper.popularmovies.utils.Utility;
-
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -85,7 +87,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         fabFavourite = findViewById(R.id.fab_favourite);
         fabFavourite.setOnClickListener(this);
 
-        updateFavoriteFAB(mMovie, false);
+        updateFavoriteFAB(mMovie,false);
 
         settingsToolbar();
         initView();
@@ -204,13 +206,26 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             supportFinishAfterTransition();
-            super.onBackPressed();
             return true;
         }
+
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -360,23 +375,27 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     ContentValuesHelper.toVideoArrayContentValues(videoResults));
         }
 
-        movie.setFavorite(!movie.getFavorite());
+        //movie.setFavorite(!movie.getFavorite());
         listener.onFavouriteUpdated(movie);
     }
 
     private void updateFavoriteFAB(MovieListResult movie, boolean click) {
-        if(movie.getFavorite()) {
+        updateFavoriteFAB(movie, checkIfMovieIsInDb(movie), click);
+    }
+
+    private void updateFavoriteFAB(MovieListResult movie, boolean isInDb, boolean click) {
+        if(isInDb) {
             fabFavourite.setImageResource(R.drawable.ic_favourite_on);
             if(click)
                 Snackbar.make(fabFavourite, "Salvato tra i preferiti!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            movie.setFavorite(true);
+            //movie.setFavorite(true);
         } else {
             fabFavourite.setImageResource(R.drawable.ic_favourite_off);
             if(click)
                 Snackbar.make(fabFavourite, "Eliminato dai preferiti!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            movie.setFavorite(false);
+            //movie.setFavorite(false);
         }
     }
 
@@ -430,7 +449,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
             if (cursor != null) cursor.close();
 
-            updateFavoriteFAB(mMovie, false);
+            //updateFavoriteFAB(mMovie, false);
         }
         else {
             callReview();
@@ -472,5 +491,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         listener.onVideoLoaded(videos);
+    }
+
+    private boolean checkIfMovieIsInDb(MovieListResult movie) {
+        Cursor cursor = getContentResolver().query(
+                MoviesContract.MovieEntry.CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int movieId = cursor.getInt(
+                        cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID));
+                if (movieId == movie.getId()) {
+                    return true;
+                }
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return false;
     }
 }
