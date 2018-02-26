@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             errorNetwork();
             mErrorMessageDisplay.setText(R.string.no_api_key);
         } else {
-            callPopular();
+            if(savedInstanceState == null)
+                callPopular();
         }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
