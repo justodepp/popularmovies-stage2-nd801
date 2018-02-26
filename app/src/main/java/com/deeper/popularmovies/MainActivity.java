@@ -373,7 +373,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void refreshData(){
-        movieAdapter.notifyDataSetChanged();
+        if(indexMenu == 2)
+            callFavorite();
     }
 }
 

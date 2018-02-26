@@ -2,7 +2,6 @@ package com.deeper.popularmovies;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -209,13 +208,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            setResult(Activity.RESULT_CANCELED);
             supportFinishAfterTransition();
             return true;
         }
-
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_CANCELED, returnIntent);
-        finish();
 
         return super.onOptionsItemSelected(item);
     }
