@@ -52,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public static final String EXTRA_IMAGE_TRANSITION_NAME = "transition_name";
 
     private String nameSort;
+    private int indexMenu;
     private int pageNum;
 
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
+    private static final String INDEX_MENU_URL_EXTRA = "index";
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
@@ -114,10 +116,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             getWindow().setExitTransition(fade);
         }
 
-        if (savedInstanceState != null) {
-            String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
-        }
-
         if (!isOnline()) {
             errorNetwork();
         } else if (Params.API_KEY.equals("")) {
@@ -138,6 +136,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(INDEX_MENU_URL_EXTRA, indexMenu);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState == null) return;
+        if (!savedInstanceState.containsKey(INDEX_MENU_URL_EXTRA)) return;
+
+        onNavigationItemSelected(bottomNavigationView.getMenu().getItem(savedInstanceState.getInt(INDEX_MENU_URL_EXTRA)));
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     private void showJsonDataView() {
@@ -194,17 +210,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 callPopular();
                 nameSort = "Popular Movies";
                 setTitle(nameSort);
+                indexMenu = 0;
                 break;
             case R.id.action_top_rated:
                 callTopRated();
                 nameSort = "Top Rated Movies";
                 setTitle(nameSort);
+                indexMenu = 1;
                 break;
             case R.id.action_favorites:
                 callFavorite();
                 nameSort = "Favourite";
                 setTitle(nameSort);
                 swipeRefreshLayout.setEnabled(false);
+                indexMenu = 2;
                 break;
         }
         return true;
