@@ -211,12 +211,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 callPopular();
                 nameSort = "Popular Movies";
                 setTitle(nameSort);
+                swipeRefreshLayout.setEnabled(true);
                 indexMenu = 0;
                 break;
             case R.id.action_top_rated:
                 callTopRated();
                 nameSort = "Top Rated Movies";
                 setTitle(nameSort);
+                swipeRefreshLayout.setEnabled(true);
                 indexMenu = 1;
                 break;
             case R.id.action_favorites:
