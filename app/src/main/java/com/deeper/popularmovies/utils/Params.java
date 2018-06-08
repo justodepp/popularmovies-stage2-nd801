@@ -5,7 +5,7 @@ package com.deeper.popularmovies.utils;
  */
 
 public class Params {
-    public static final String API_KEY = "e027ada806e9927a5c3834746b4cac0f";
+    public static final String API_KEY = "YOUR API KEY";
 
     public static final String ENDPOINT = "https://api.themoviedb.org/3/movie/";
 
