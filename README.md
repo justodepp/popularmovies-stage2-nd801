@@ -10,9 +10,11 @@ starting from previous project [stage 1](https://github.com/justodepp/popularmov
 #### Credits
 icon launcer provided by [Pixel Perfect](https://www.flaticon.com/authors/pixel-perfect)
 
+<img src="https://raw.githubusercontent.com/justodepp/popularmovies-stage1-nd801/master/art/Screenshot_1528461601.png" width="250"> <img src="https://raw.githubusercontent.com/justodepp/popularmovies-stage1-nd801/master/art/Screenshot_1528461617.png" width="250"> <img src="https://raw.githubusercontent.com/justodepp/popularmovies-stage1-nd801/master/art/Screenshot_1528461654.png" width="250">
+
 License
 -------------
-
+```
 Copyright 2018 Gianni Andrea Cavalli
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor
@@ -29,3 +31,4 @@ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
 License for the specific language governing permissions and limitations under
 the License.
+```
